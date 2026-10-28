@@ -1,0 +1,11 @@
+{
+  "title": "Finzentra — учёт финансов",
+  "description": "Finzentra — учёт доходов, расходов и налогов по проектам.",
+  "robots": {
+    "index": true
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
