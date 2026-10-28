@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Markdown Export</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; color: #1e293b; }
+h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; margin-bottom: 0.5em; }
+code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+pre { background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 8px; overflow-x: auto; }
+pre code { background: none; padding: 0; color: inherit; }
+blockquote { border-left: 4px solid #6366f1; margin: 1em 0; padding: 0.5em 1em; background: #f8fafc; }
+table { border-collapse: collapse; width: 100%; margin: 1em 0; }
+th, td { border: 1px solid #cbd5e1; padding: 8px 12px; text-align: left; }
+th { background: #f1f5f9; font-weight: 600; }
+hr { border: none; border-top: 2px solid #e2e8f0; margin: 2em 0; }
+img { max-width: 100%; height: auto; }
+a { color: #4f46e5; }
+</style>
+</head>
+<body>
+<h1>ТЗ: Модуль «Дашборд и Отчеты» (P&L и Cash Flow) </h1>
+<hr/>
+<h2>1. Общее описание модуля</h2>
+<p>Модуль «Дашборд и Отчеты» — это ключевой аналитический экран приложения, где пользователь видит сводную картину финансов своих проектов. Модуль поддерживает <strong>два метода учета</strong> (кассовый и метод начисления) и <strong>два формата отображения</strong> (абсолютные значения и проценты), что позволяет пользователю анализировать денежные потоки и прибыльность бизнеса.</p>
+<strong>Цель модуля:</strong> Предоставить предпринимателю инструмент для сравнения периодов в одном проекте и сравнения проектов между собой, анализа структуры доходов и расходов, принятия бизнес-решений на основе данных.
+<hr/>
+<h2>2. User Stories</h2>
+<table class="md-table"><thead><tr><th>ID</th><th>User Story</th><th>Приоритет</th></tr></thead><tbody><tr><td>US-DASH-01</td><td>Как пользователь, я хочу видеть сводный отчет о доходах, расходах и прибыли за выбранный период, чтобы понимать финансовое состояние проекта</td><td>Высокий</td></tr><tr><td>US-DASH-02</td><td>Как пользователь, я хочу переключаться между кассовым методом и методом начисления, чтобы видеть как реальные денежные потоки, так и реальную прибыль периода</td><td>Высокий</td></tr><tr><td>US-DASH-03</td><td>Как пользователь, я хочу видеть отчет в процентах от дохода, чтобы анализировать структуру расходов и сравнивать проекты разного масштаба</td><td>Высокий</td></tr><tr><td>US-DASH-04</td><td>Как пользователь, я хочу фильтровать отчет по одному или нескольким проектам, чтобы сравнивать их между собой</td><td>Высокий</td></tr><tr><td>US-DASH-05</td><td>Как пользователь, я хочу видеть детализацию по категориям доходов и расходов, чтобы понимать, куда уходят деньги</td><td>Средний</td></tr><tr><td>US-DASH-06</td><td>Как пользователь, я хочу сравнивать периоды (месяц к месяцу, квартал к кварталу), чтобы отслеживать динамику бизнеса</td><td>Средний</td></tr></tbody></table>
+<hr/>
+<h2>3. Функциональные требования</h2>
+<h3>3.1. Глобальные фильтры</h3>
+<table class="md-table"><thead><tr><th>ID</th><th>Требование</th><th>Описание</th></tr></thead><tbody><tr><td>FR-DASH-01</td><td>Фильтр «Период»</td><td>Пользователь может выбрать период: <strong>Месяц</strong> (например, "Октябрь 2026"), <strong>Квартал</strong> (например, "Q4 2026"), <strong>Год</strong> (например, "2026"). По умолчанию — текущий месяц.</td></tr><tr><td>FR-DASH-02</td><td>Фильтр «Проекты»</td><td>Пользователь может выбрать: <strong>«Все проекты»</strong> или <strong>мультивыбор конкретных проектов</strong> из списка (чекбоксы). По умолчанию — все активные проекты.</td></tr><tr><td>FR-DASH-03</td><td>Переключатель метода учета</td><td>Пользователь может переключать метод расчета: <strong>Кассовый метод (Cash Flow)</strong> или <strong>Метод начисления (P&L)</strong>. По умолчанию — метод начисления (P&L).</td></tr><tr><td>FR-DASH-04</td><td>Переключатель формата отображения</td><td>Пользователь может переключать вид отчета: <strong>Абсолютные значения (₽)</strong> или <strong>Проценты (%)</strong>. По умолчанию — абсолютные значения.</td></tr></tbody></table>
+<h3>3.2. Структура отчета</h3>
+<table class="md-table"><thead><tr><th>ID</th><th>Требование</th><th>Описание</th></tr></thead><tbody><tr><td>FR-DASH-05</td><td>Отображение раздела «Доходы»</td><td>Отображается строка <strong>«Доходы Итого»</strong> (сумма всех доходов за период) и детализация по каждой категории дохода с суммой/процентом.</td></tr><tr><td>FR-DASH-06</td><td>Отображение раздела «Расходы»</td><td>Отображается строка <strong>«Расходы Итого»</strong> (сумма всех расходов за период) и детализация по каждой категории расхода с суммой/процентом.</td></tr><tr><td>FR-DASH-07</td><td>Отображение раздела «Налоги»</td><td>Отображается строка <strong>«Налоги»</strong> (сумма всех операций с типом «Налог» за период). Детализация по категориям налогов (УСН, страховые взносы и т.д.).</td></tr><tr><td>FR-DASH-08</td><td>Расчет «Чистая прибыль»</td><td><strong>Чистая прибыль = Доходы Итого − Расходы Итого − Налоги</strong>. Отображается отдельной строкой в конце отчета.</td></tr><tr><td>FR-DASH-09</td><td>Расчет процентов</td><td>В режиме «Проценты» все суммы отображаются как <strong>% от «Доходы Итого»</strong>. Доходы Итого = 100%.</td></tr><tr><td>FR-DASH-10</td><td>Обработка деления на ноль</td><td>Если <strong>Доходы Итого = 0</strong>, проценты не рассчитываются. Отображается <strong>«0%»</strong> или <strong>«—»</strong> (прочерк).</td></tr></tbody></table>
+<h3>3.3. Логика фильтрации по датам</h3>
+<table class="md-table"><thead><tr><th>ID</th><th>Требование</th><th>Описание</th></tr></thead><tbody><tr><td>FR-DASH-11</td><td>Кассовый метод (Cash Flow)</td><td>При выборе «Кассовый метод» все суммы рассчитываются по полю <strong><code class="md-inline-code">date_fact</code></strong> (дата фактического движения денег). SQL: <code class="md-inline-code">WHERE date_fact BETWEEN :start_date AND :end_date</code>.</td></tr><tr><td>FR-DASH-12</td><td>Метод начисления (P&L)</td><td>При выборе «Метод начисления» все суммы рассчитываются по полю <strong><code class="md-inline-code">date_period</code></strong> (дата периода, к которому относится операция). SQL: <code class="md-inline-code">WHERE date_period BETWEEN :start_date AND :end_date</code>.</td></tr></tbody></table>
+<h3>3.4. Детализация по категориям</h3>
+<table class="md-table"><thead><tr><th>ID</th><th>Требование</th><th>Описание</th></tr></thead><tbody><tr><td>FR-DASH-13</td><td>Группировка по категориям</td><td>В отчете доходы и расходы группируются по категориям. Каждая категория отображается отдельной строкой с суммой/процентом.</td></tr><tr><td>FR-DASH-14</td><td>Сортировка категорий</td><td>Категории сортируются по убыванию суммы (от наибольшей к наименьшей).</td></tr><tr><td>FR-DASH-15</td><td>Отображение только активных категорий</td><td>В отчете отображаются только категории с <code class="md-inline-code">is_active = true</code>. Скрытые категории не учитываются.</td></tr></tbody></table>
+<hr/>
+<h2>4. Бизнес-правила и логика расчетов</h2>
+<h3>4.1. Формулы расчетов</h3>
+<h4>Абсолютные значения (₽)</h4>
+<pre class="md-code-block"><code>Доходы Итого = SUM(amount) FROM income_transactions WHERE (date_fact или date_period) BETWEEN :start AND :end
+Расходы Итого = SUM(amount) FROM expense_transactions WHERE (date_fact или date_period) BETWEEN :start AND :end
+Налоги = SUM(amount) FROM expense_transactions WHERE category.type = 'TAX' AND (date_fact или date_period) BETWEEN :start AND :end
+Чистая прибыль = Доходы Итого − Расходы Итого − Налоги</code></pre>
+<h4>Проценты (%)</h4>
+<pre class="md-code-block"><code>Доходы Итого = 100%
+Доход по категории X = (Сумма категории X / Доходы Итого) × 100%
+Расходы Итого = (Расходы Итого / Доходы Итого) × 100%
+Расход по категории Y = (Сумма категории Y / Доходы Итого) × 100%
+Налоги = (Налоги / Доходы Итого) × 100%
+Чистая прибыль = (Чистая прибыль / Доходы Итого) × 100%</code></pre>
+<strong>Важно:</strong> Если <code class="md-inline-code">Доходы Итого = 0</code>, все проценты = <code class="md-inline-code">0%</code> или <code class="md-inline-code">—</code> (избегаем деления на ноль).
+<h3>4.2. Пример расчета</h3>
+<strong>Исходные данные за октябрь 2026 (метод начисления, один проект «ПВЗ Wildberries»):</strong>
+<table class="md-table"><thead><tr><th>Категория</th><th>Сумма (₽)</th></tr></thead><tbody><tr><td>Доход от ВБ</td><td>211 514</td></tr><tr><td>Продажа книг</td><td>15 000</td></tr><tr><td><strong>Доходы Итого</strong></td><td><strong>226 514</strong></td></tr><tr><td>Аренда</td><td>55 000</td></tr><tr><td>Зарплата</td><td>111 906</td></tr><tr><td>Коммуналка</td><td>8 750</td></tr><tr><td>Интернет</td><td>14 000</td></tr><tr><td>Расходники</td><td>5 595</td></tr><tr><td>Прочие</td><td>0</td></tr><tr><td><strong>Расходы Итого</strong></td><td><strong>195 251</strong></td></tr><tr><td>УСН</td><td>0</td></tr><tr><td><strong>Налоги</strong></td><td><strong>0</strong></td></tr><tr><td><strong>Чистая прибыль</strong></td><td><strong>31 263</strong></td></tr></tbody></table>
+<strong>Отображение в процентах:</strong>
+<table class="md-table"><thead><tr><th>Статья</th><th>Абсолютное значение (₽)</th><th>Относительное значение (%)</th></tr></thead><tbody><tr><td><strong>Доходы Итого</strong></td><td><strong>226 514</strong></td><td><strong>100%</strong></td></tr><tr><td>- Доход от ВБ</td><td>211 514</td><td>93.4%</td></tr><tr><td>- Продажа книг</td><td>15 000</td><td>6.6%</td></tr><tr><td><strong>Расходы Итого</strong></td><td><strong>195 251</strong></td><td><strong>86.2%</strong></td></tr><tr><td>- Зарплата</td><td>111 906</td><td>49.4%</td></tr><tr><td>- Аренда</td><td>55 000</td><td>24.3%</td></tr><tr><td>- Интернет</td><td>14 000</td><td>6.2%</td></tr><tr><td>- Коммуналка</td><td>8 750</td><td>3.9%</td></tr><tr><td>- Расходники</td><td>5 595</td><td>2.5%</td></tr><tr><td><strong>Налоги</strong></td><td><strong>0</strong></td><td><strong>0%</strong></td></tr><tr><td><strong>Чистая прибыль</strong></td><td><strong>31 263</strong></td><td><strong>13.8%</strong></td></tr></tbody></table>
+<h3>4.3. Различие между кассовым методом и методом начисления</h3>
+<strong>Пример из ТЗ куратора:</strong>
+<table class="md-table"><thead><tr><th>Операция</th><th>Сумма</th><th>date_fact</th><th>date_period</th><th>Cash Flow (октябрь)</th><th>P&L (октябрь)</th><th>Cash Flow (ноябрь)</th><th>P&L (ноябрь)</th></tr></thead><tbody><tr><td>Аренда за ноябрь (оплата 25.10)</td><td>55 000 ₽</td><td>25.10.2026</td><td>01.11.2026</td><td>55 000 ₽</td><td>0 ₽</td><td>0 ₽</td><td>55 000 ₽</td></tr><tr><td>Доход от ВБ за октябрь (оплата 05.11)</td><td>123 953 ₽</td><td>05.11.2026</td><td>31.10.2026</td><td>0 ₽</td><td>123 953 ₽</td><td>123 953 ₽</td><td>0 ₽</td></tr></tbody></table>
+<hr/>
+<h2>5. Структура данных (связь с БД)</h2>
+<h3>5.1. Таблицы для расчета</h3>
+<h4>Доходы</h4>
+<pre class="md-code-block"><code class="language-sql">SELECT 
+    c.name AS category_name,
+    SUM(it.amount) AS total_amount
+FROM income_transactions it
+JOIN categories c ON it.category_id = c.id
+WHERE it.user_id = :user_id
+    AND it.project_id IN (:project_ids)
+    AND it.date_fact BETWEEN :start_date AND :end_date  -- для Cash Flow
+    -- ИЛИ
+    AND it.date_period BETWEEN :start_date AND :end_date  -- для P&amp;L
+    AND c.is_active = TRUE
+GROUP BY c.id, c.name
+ORDER BY total_amount DESC;</code></pre>
+<h4>Расходы (включая налоги)</h4>
+<pre class="md-code-block"><code class="language-sql">SELECT 
+    c.name AS category_name,
+    c.type AS category_type,  -- 'EXPENSE' или 'TAX'
+    SUM(et.amount) AS total_amount
+FROM expense_transactions et
+JOIN categories c ON et.category_id = c.id
+WHERE et.user_id = :user_id
+    AND et.project_id IN (:project_ids)
+    AND et.date_fact BETWEEN :start_date AND :end_date  -- для Cash Flow
+    -- ИЛИ
+    AND et.date_period BETWEEN :start_date AND :end_date  -- для P&amp;L
+    AND c.is_active = TRUE
+GROUP BY c.id, c.name, c.type
+ORDER BY total_amount DESC;</code></pre>
+<h3>5.2. Индексы для ускорения запросов</h3>
+<pre class="md-code-block"><code class="language-sql">-- Индексы для таблицы income_transactions
+CREATE INDEX idx_income_user_date_fact ON income_transactions(user_id, date_fact);
+CREATE INDEX idx_income_user_date_period ON income_transactions(user_id, date_period);
+CREATE INDEX idx_income_project ON income_transactions(project_id);
+
+-- Индексы для таблицы expense_transactions
+CREATE INDEX idx_expense_user_date_fact ON expense_transactions(user_id, date_fact);
+CREATE INDEX idx_expense_user_date_period ON expense_transactions(user_id, date_period);
+CREATE INDEX idx_expense_project ON expense_transactions(project_id);</code></pre>
+<hr/>
+<h2>6. Нефункциональные требования</h2>
+<table class="md-table"><thead><tr><th>ID</th><th>Требование</th><th>Описание</th></tr></thead><tbody><tr><td>NFR-DASH-01</td><td>Производительность</td><td>Загрузка дашборда при объеме до 1000 операций — не более 2 секунд.</td></tr><tr><td>NFR-DASH-02</td><td>Адаптивность</td><td>Отчет корректно отображается на мобильных устройствах (Chrome Android 11+, Safari iOS 12+) и десктопе. На мобильных — вертикальная прокрутка, на десктопе — фиксированная шапка таблицы.</td></tr><tr><td>NFR-DASH-03</td><td>Форматирование чисел</td><td>Суммы отображаются с разделителем тысяч (например, <code class="md-inline-code">226 514 ₽</code>) и 2 знаками после запятой для копеек (если есть).</td></tr><tr><td>NFR-DASH-04</td><td>Обработка пустых данных</td><td>Если за выбранный период нет операций, отображается сообщение: «Нет данных за выбранный период».</td></tr><tr><td>NFR-DASH-05</td><td>Кэширование</td><td>Результаты запросов кэшируются на стороне сервера на 5 минут для снижения нагрузки на БД.</td></tr></tbody></table>
+<hr/>
+<h2>7. Критерии приемки (Acceptance Criteria)</h2>
+<h3>AC для US-DASH-01, US-DASH-02 (Базовый отчет с переключением методов)</h3>
+<ul><li>[ ] Пользователь может выбрать период (месяц/квартал/год) и проекты.</li><li>[ ] При выборе «Метод начисления» суммы рассчитываются по <code class="md-inline-code">date_period</code>.</li><li>[ ] При выборе «Кассовый метод» суммы рассчитываются по <code class="md-inline-code">date_fact</code>.</li><li>[ ] Отчет отображает: Доходы Итого, Расходы Итого, Налоги, Чистая прибыль.</li><li>[ ] Детализация по категориям отображается под каждой итоговой строкой.</li></ul>
+<h3>AC для US-DASH-03 (Отображение в процентах)</h3>
+<ul><li>[ ] При переключении в режим «Проценты» Доходы Итого отображаются как 100%.</li><li>[ ] Все остальные строки отображаются как % от Доходы Итого.</li><li>[ ] Если Доходы Итого = 0, проценты отображаются как «0%» или «—».</li><li>[ ] Чистая прибыль может быть отрицательной (убыток), процент тоже отрицательный.</li></ul>
+<h3>AC для US-DASH-04 (Фильтрация по проектам)</h3>
+<ul><li>[ ] Пользователь может выбрать «Все проекты» — отчет показывает сумму по всем проектам.</li><li>[ ] Пользователь может выбрать один проект — отчет показывает данные только по нему.</li><li>[ ] Пользователь может выбрать несколько проектов — отчет показывает агрегированные данные по выбранным.</li></ul>
+<h3>AC для US-DASH-05 (Детализация по категориям)</h3>
+<ul><li>[ ] Категории сортируются по убыванию суммы.</li><li>[ ] Скрытые категории (<code class="md-inline-code">is_active = false</code>) не отображаются в отчете.</li><li>[ ] Коммуналка и Интернет отображаются как <strong>разные строки</strong> (не объединены).</li></ul>
+<h3>AC для US-DASH-06 (Сравнение периодов)</h3>
+<ul><li>[ ] Пользователь может выбрать разные периоды и сравнить показатели (например, октябрь vs сентябрь).</li><li>[ ] При сравнении периодов отображаются оба периода рядом (опционально, если позволяет UI).</li></ul>
+<hr/>
+<h2>8. Сценарии использования (Use Cases)</h2>
+<h3>Сценарий 1: Просмотр P&L за октябрь 2026 (метод начисления)</h3>
+<ol><li>Пользователь открывает раздел «Дашборд».</li><li>Выбирает период: «Октябрь 2026».</li><li>Выбирает проекты: «Все проекты».</li><li>Переключатель метода: «Метод начисления (P&L)».</li><li>Переключатель формата: «Абсолютные значения (₽)».</li><li>Система загружает данные по <code class="md-inline-code">date_period</code> за октябрь 2026.</li><li>Отображается таблица:</li></ol>   - Доходы Итого: 226 514 ₽
+<p>   - Расходы Итого: 195 251 ₽</p>
+<p>   - Налоги: 0 ₽</p>
+<p>   - Чистая прибыль: 31 263 ₽</p>
+<ol><li>Пользователь видит детализацию по категориям (Аренда: 55 000 ₽, Зарплата: 111 906 ₽ и т.д.).</li></ol>
+<h3>Сценарий 2: Просмотр Cash Flow за октябрь 2026 (кассовый метод)</h3>
+<ol><li>Пользователь переключает метод на «Кассовый метод (Cash Flow)».</li><li>Система пересчитывает данные по <code class="md-inline-code">date_fact</code> за октябрь 2026.</li><li>Отображается таблица:</li></ol>   - Поступления: 135 953 ₽ (только те, что фактически пришли в октябре)
+<p>   - Выплаты: 194 204 ₽ (только те, что фактически ушли в октябре)</p>
+<p>   - Сальдо: -58 251 ₽ (отток денег)</p>
+<ol><li>Пользователь видит, что несмотря на прибыль по P&L, в октябре был отток денег (из-за авансовых платежей).</li></ol>
+<h3>Сценарий 3: Анализ структуры расходов в процентах</h3>
+<ol><li>Пользователь переключает формат на «Проценты (%)».</li><li>Система пересчитывает все строки как % от Доходы Итого.</li><li>Отображается таблица:</li></ol>   - Доходы Итого: 100%
+<p>   - Зарплата: 49.4%</p>
+<p>   - Аренда: 24.3%</p>
+<p>   - Интернет: 6.2%</p>
+<p>   - Коммуналка: 3.9%</p>
+<p>   - Расходники: 2.5%</p>
+<p>   - Расходы Итого: 86.2%</p>
+<p>   - Чистая прибыль: 13.8%</p>
+<ol><li>Пользователь видит, что зарплата занимает почти половину доходов, и решает оптимизировать расходы.</li></ol>
+<h3>Сценарий 4: Сравнение двух проектов</h3>
+<ol><li>Пользователь выбирает проекты: «ПВЗ Wildberries» и «Книги на Ozon».</li><li>Система агрегирует данные по обоим проектам.</li><li>Отображается сводный отчет:</li></ol>   - Доходы Итого: 350 000 ₽ (сумма по обоим проектам)
+<p>   - Расходы Итого: 280 000 ₽</p>
+<p>   - Чистая прибыль: 70 000 ₽</p>
+<ol><li>Пользователь видит общую картину по всем бизнесам.</li></ol>
+<hr/>
+<h2>9. Спорные моменты</h2>
+<table class="md-table"><thead><tr><th>№</th><th>Вопрос</th><th>Решение</th><th>Обоснование</th></tr></thead><tbody><tr><td>1</td><td><strong>UI/UX: Как реализовать переключатель «Кассовый метод / Метод начисления» на мобильном экране?</strong></td><td><strong>Сегментированный контрол (Segmented Control)</strong> — горизонтальные кнопки-табы в виде одной плашки.</td><td>Компактно, видно оба варианта сразу, переключение в 1 клик. Свитч слишком мелкий для длинных названий, выпадающий список требует 2 клика.</td></tr><tr><td>2</td><td><strong>UI/UX: Как реализовать мультивыбор проектов на мобильном экране?</strong></td><td><strong>Модальное окно с чекбоксами</strong> + кнопка «Все проекты» сверху.</td><td>Понятно на мобильном, быстро выбирается. Чекбоксы в выпадающем списке неудобны при длинном списке, поиск избыточен для 3-5 проектов.</td></tr><tr><td>3</td><td><strong>Backend: Нужно ли кэшировать результаты запросов дашборда?</strong></td><td><strong>Не делать кэширование в MVP.</strong> Запросы к БД выполняются напрямую.</td><td>Объем данных маленький (50-100 операций/месяц на пользователя). PostgreSQL сам кэширует в shared buffers. Риск рассинхрона: пользователь добавил операцию → дашборд показывает старые данные из кэша.</td></tr><tr><td>4</td><td><strong>Backend: Как обрабатывать ситуацию, когда у пользователя нет ни одной операции за выбранный период?</strong></td><td><strong>Empty state с понятным UI-сообщением</strong> и кнопкой «Добавить операцию». Ошибки не возвращаются.</td><td>Это нормальная ситуация (новый пользователь, первый месяц), а не ошибка системы.</td></tr><tr><td>5</td><td><strong>Frontend: Нужна ли визуализация (графики, диаграммы) в MVP?</strong></td><td><strong>Только таблицы в MVP.</strong> Графики и диаграммы — в бэклог.</td><td>Куратор в презентации показал только таблицы. MVP = минимальный продукт. Таблицы с процентами уже дают хорошую аналитику.</td></tr><tr><td>6</td><td><strong>Frontend: Нужен ли экспорт отчета в PDF/Excel?</strong></td><td><strong>Не делать в MVP.</strong> Перенести в бэклог.</td><td>Куратор прямо сказал: «В MVP можно не делать. Потом xls или гугл-таблицы».</td></tr></tbody></table>
+<hr/>
+
+</body>
+</html>

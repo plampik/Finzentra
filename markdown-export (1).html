@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Markdown Export</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; color: #1e293b; }
+h1, h2, h3, h4, h5, h6 { margin-top: 1.5em; margin-bottom: 0.5em; }
+code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+pre { background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 8px; overflow-x: auto; }
+pre code { background: none; padding: 0; color: inherit; }
+blockquote { border-left: 4px solid #6366f1; margin: 1em 0; padding: 0.5em 1em; background: #f8fafc; }
+table { border-collapse: collapse; width: 100%; margin: 1em 0; }
+th, td { border: 1px solid #cbd5e1; padding: 8px 12px; text-align: left; }
+th { background: #f1f5f9; font-weight: 600; }
+hr { border: none; border-top: 2px solid #e2e8f0; margin: 2em 0; }
+img { max-width: 100%; height: auto; }
+a { color: #4f46e5; }
+</style>
+</head>
+<body>
+<h1>ТЗ: Модуль «Операции» (Доходы, Расходы, Налоги)</h1>
+<hr/>
+<h2>1. Общее описание модуля</h2>
+<p>Модуль «Операции» — это ядро приложения, где пользователь ведет учет всех финансовых операций: доходов, расходов и налогов. Каждая операция привязана к проекту, категории и имеет <strong>две даты</strong> для поддержки кассового метода и метода начисления.</p>
+<strong>Цель модуля:</strong> Предоставить пользователю простой и понятный интерфейс для ввода финансовых данных с возможностью корректного учета временных разрывов между фактическим движением денег и периодом, к которому относится операция.
+<hr/>
+<h2>2. User Stories</h2>
+<table class="md-table"><thead><tr><th>ID</th><th>User Story</th><th>Приоритет</th></tr></thead><tbody><tr><td>US-OP-01</td><td>Как пользователь, я хочу добавить операцию дохода, указав две даты, чтобы корректно отражать поступления в отчетах</td><td>Высокий</td></tr><tr><td>US-OP-02</td><td>Как пользователь, я хочу добавить операцию расхода, указав две даты, чтобы учитывать авансовые платежи и задержки выплат</td><td>Высокий</td></tr><tr><td>US-OP-03</td><td>Как пользователь, я хочу добавить операцию налога вручную, так как суммы налогов приходят извне и не рассчитываются автоматически</td><td>Высокий</td></tr><tr><td>US-OP-04</td><td>Как пользователь, я хочу видеть список всех операций с возможностью фильтрации по проекту, периоду и типу, чтобы быстро находить нужные записи</td><td>Высокий</td></tr><tr><td>US-OP-05</td><td>Как пользователь, я хочу редактировать и удалять операции, чтобы исправлять ошибки ввода</td><td>Средний</td></tr><tr><td>US-OP-06</td><td>Как пользователь, я хочу добавить комментарий к операции, чтобы запомнить детали (например, "аренда за ноябрь")</td><td>Средний</td></tr></tbody></table>
+<hr/>
+<h2>3. Функциональные требования</h2>
+<h3>3.1. Добавление операции</h3>
+<table class="md-table"><thead><tr><th>ID</th><th>Требование</th><th>Описание</th></tr></thead><tbody><tr><td>FR-OP-01</td><td>Выбор типа операции</td><td>Пользователь выбирает тип: <strong>Доход / Расход / Налог</strong>. Интерфейс формы адаптируется под выбранный тип (меняется список категорий).</td></tr><tr><td>FR-OP-02</td><td>Поле «Сумма»</td><td>Обязательное поле. Только положительные числа, максимум 2 знака после запятой. Валюта: рубли (₽).</td></tr><tr><td>FR-OP-03</td><td>Поле «Дата факта» (<code class="md-inline-code">date_fact</code>)</td><td>Обязательное поле. По умолчанию = сегодня. Это дата реального движения денег. Используется для отчета <strong>Cash Flow</strong> (кассовый метод).</td></tr><tr><td>FR-OP-04</td><td>Поле «Дата периода» (<code class="md-inline-code">date_period</code>)</td><td>Обязательное поле. По умолчанию = <code class="md-inline-code">date_fact</code>. Это дата периода, к которому относится операция. Используется для отчета <strong>P&L</strong> (метод начисления). Может быть в прошлом или будущем относительно <code class="md-inline-code">date_fact</code>.</td></tr><tr><td>FR-OP-05</td><td>Поле «Проект»</td><td>Обязательное поле. Выпадающий список активных проектов пользователя.</td></tr><tr><td>FR-OP-06</td><td>Поле «Категория»</td><td>Обязательное поле. Выпадающий список из живого справочника. Список зависит от типа операции: для дохода — категории с <code class="md-inline-code">type='INCOME'</code>, для расхода — <code class="md-inline-code">type='EXPENSE'</code>, для налога — <code class="md-inline-code">type='TAX'</code>.</td></tr><tr><td>FR-OP-07</td><td>Поле «Комментарий»</td><td>Необязательное текстовое поле, до 255 символов. Ручной ввод.</td></tr><tr><td>FR-OP-08</td><td>Сохранение операции</td><td>После заполнения обязательных полей и нажатия «Сохранить» операция записывается в БД и отображается в списке.</td></tr></tbody></table>
+<h3>3.2. Список операций</h3>
+<table class="md-table"><thead><tr><th>ID</th><th>Требование</th><th>Описание</th></tr></thead><tbody><tr><td>FR-OP-09</td><td>Отображение списка</td><td>Список операций отображается в хронологическом порядке (по <code class="md-inline-code">date_fact</code>, от новых к старым).</td></tr><tr><td>FR-OP-10</td><td>Фильтрация по проекту</td><td>Пользователь может фильтровать операции по одному проекту, нескольким или всем сразу.</td></tr><tr><td>FR-OP-11</td><td>Фильтрация по периоду</td><td>Пользователь может выбрать период (месяц/квартал/год) для отображения операций.</td></tr><tr><td>FR-OP-12</td><td>Фильтрация по типу</td><td>Пользователь может фильтровать по типу: только доходы, только расходы, только налоги или все вместе.</td></tr><tr><td>FR-OP-13</td><td>Отображаемые поля в списке</td><td>В списке отображаются: <code class="md-inline-code">date_fact</code>, сумма, категория, проект, комментарий (если есть).</td></tr></tbody></table>
+<h3>3.3. Редактирование и удаление</h3>
+<table class="md-table"><thead><tr><th>ID</th><th>Требование</th><th>Описание</th></tr></thead><tbody><tr><td>FR-OP-14</td><td>Редактирование операции</td><td>Пользователь может открыть существующую операцию, изменить любые поля и сохранить изменения.</td></tr><tr><td>FR-OP-15</td><td>Удаление операции</td><td>Пользователь может удалить операцию. Требуется подтверждение действия («Вы уверены?»).</td></tr></tbody></table>
+<hr/>
+<h2>4. Поля формы добавления операции</h2>
+<h3>Форма для всех типов операций</h3>
+<table class="md-table"><thead><tr><th>Поле</th><th>Тип</th><th>Обязательное</th><th>Значение по умолчанию</th><th>Валидация</th></tr></thead><tbody><tr><td><strong>Тип операции</strong></td><td>Select (Доход / Расход / Налог)</td><td>Да</td><td>Расход</td><td>—</td></tr><tr><td><strong>Сумма</strong></td><td>Number (decimal)</td><td>Да</td><td>—</td><td>> 0, максимум 2 знака после запятой, только рубли</td></tr><tr><td><strong>Дата факта</strong> (<code class="md-inline-code">date_fact</code>)</td><td>Date</td><td>Да</td><td>Сегодня</td><td>Не может быть пустой</td></tr><tr><td><strong>Дата периода</strong> (<code class="md-inline-code">date_period</code>)</td><td>Date</td><td>Да</td><td>= <code class="md-inline-code">date_fact</code></td><td>Не может быть пустой, может быть в прошлом/будущем</td></tr><tr><td><strong>Проект</strong></td><td>Select</td><td>Да</td><td>—</td><td>Только активные проекты пользователя</td></tr><tr><td><strong>Категория</strong></td><td>Select</td><td>Да</td><td>—</td><td>Зависит от типа операции, из живого справочника</td></tr><tr><td><strong>Комментарий</strong></td><td>Text</td><td>Нет</td><td>—</td><td>Максимум 255 символов</td></tr></tbody></table>
+<hr/>
+<h2>5. Бизнес-правила</h2>
+<h3>5.1. Две даты операции</h3>
+<table class="md-table"><thead><tr><th>Ситуация</th><th><code class="md-inline-code">date_fact</code></th><th><code class="md-inline-code">date_period</code></th><th>Отчет Cash Flow</th><th>Отчет P&L</th></tr></thead><tbody><tr><td>Обычная операция (оплата в день сделки)</td><td>15.10.2026</td><td>15.10.2026</td><td>Октябрь 2026</td><td>Октябрь 2026</td></tr><tr><td>Авансовый платеж (оплата за следующий месяц)</td><td>25.10.2026</td><td>01.11.2026</td><td>Октябрь 2026</td><td>Ноябрь 2026</td></tr><tr><td>Задержка выплаты (работа в октябре, оплата в ноябре)</td><td>05.11.2026</td><td>31.10.2026</td><td>Ноябрь 2026</td><td>Октябрь 2026</td></tr></tbody></table>
+<h3>5.2. Налоги</h3>
+<ul><li><strong>Налоги не рассчитываются автоматически.</strong> Пользователь вводит сумму вручную на основании квитанции из банка или ФНС.</li><li>Налоги хранятся как операции с типом <strong>«Налог»</strong> (в БД — отдельная таблица <code class="md-inline-code">tax_transactions</code> или в <code class="md-inline-code">expense_transactions</code> с категорией <code class="md-inline-code">type='TAX'</code>).</li><li>Системные категории налогов (УСН 6%, УСН 15%, Страховые взносы, НДФЛ) создаются при инициализации БД с флагом <code class="md-inline-code">is_system = true</code>.</li></ul>
+<h3>5.3. Живой справочник категорий</h3>
+<ul><li>Пользователь может добавлять свои категории доходов, расходов и налогов.</li><li>Системные категории (например, «Аренда», «Коммуналка», «Интернет» — <strong>строго разные строки!</strong>) нельзя удалить, но можно скрыть (<code class="md-inline-code">is_active = false</code>).</li><li>Пользовательскую категорию можно удалить, только если по ней нет ни одной операции.</li></ul>
+<h3>5.4. Валюта</h3>
+<ul><li>Все суммы строго в рублях (RUB). Конвертация валют не предусмотрена.</li></ul>
+<hr/>
+<h2>6. Структура данных (связь с БД)</h2>
+<h3>Таблицы в БД (согласно файлу <code class="md-inline-code">База данных.md</code>)</h3>
+<table class="md-table"><thead><tr><th>Тип операции</th><th>Таблица</th><th>Поля</th></tr></thead><tbody><tr><td><strong>Доход</strong></td><td><code class="md-inline-code">income_transactions</code></td><td><code class="md-inline-code">id</code>, <code class="md-inline-code">user_id</code>, <code class="md-inline-code">project_id</code>, <code class="md-inline-code">category_id</code>, <code class="md-inline-code">amount</code>, <code class="md-inline-code">date_fact</code>, <code class="md-inline-code">date_period</code>, <code class="md-inline-code">comment</code>, <code class="md-inline-code">attachment_url</code>, <code class="md-inline-code">created_at</code></td></tr><tr><td><strong>Расход</strong></td><td><code class="md-inline-code">expense_transactions</code></td><td><code class="md-inline-code">id</code>, <code class="md-inline-code">user_id</code>, <code class="md-inline-code">project_id</code>, <code class="md-inline-code">category_id</code>, <code class="md-inline-code">amount</code>, <code class="md-inline-code">date_fact</code>, <code class="md-inline-code">date_period</code>, <code class="md-inline-code">comment</code>, <code class="md-inline-code">attachment_url</code>, <code class="md-inline-code">created_at</code></td></tr><tr><td><strong>Налог</strong></td><td><code class="md-inline-code">tax_transactions</code> (рекомендуется добавить)</td><td><code class="md-inline-code">id</code>, <code class="md-inline-code">user_id</code>, <code class="md-inline-code">project_id</code>, <code class="md-inline-code">category_id</code>, <code class="md-inline-code">amount</code>, <code class="md-inline-code">date_fact</code>, <code class="md-inline-code">date_period</code>, <code class="md-inline-code">comment</code>, <code class="md-inline-code">created_at</code></td></tr></tbody></table>
+<blockquote><strong>Примечание:</strong> Налоги можно хранить в <code class="md-inline-code">expense_transactions</code> с категорией <code class="md-inline-code">type='TAX'</code>. Но для чистоты архитектуры рекомендуется отдельная таблица <code class="md-inline-code">tax_transactions</code>.</blockquote>
+<h3>Расширение ENUM в таблице <code class="md-inline-code">categories</code></h3>
+<pre class="md-code-block"><code class="language-sql">-- Текущий ENUM
+type ENUM ('INCOME', 'EXPENSE')
+
+-- Рекомендуемое расширение
+type ENUM ('INCOME', 'EXPENSE', 'TAX')</code></pre>
+<h3>Системные категории налогов (для инициализации БД)</h3>
+<pre class="md-code-block"><code class="language-sql">INSERT INTO categories (name, type, is_system, is_active) VALUES
+('УСН 6%', 'TAX', TRUE, TRUE),
+('УСН 15%', 'TAX', TRUE, TRUE),
+('Страховые взносы', 'TAX', TRUE, TRUE),
+('НДФЛ', 'TAX', TRUE, TRUE),
+('Транспортный налог', 'TAX', TRUE, TRUE);</code></pre>
+<hr/>
+<h2>7. Нефункциональные требования</h2>
+<table class="md-table"><thead><tr><th>ID</th><th>Требование</th><th>Описание</th></tr></thead><tbody><tr><td>NFR-OP-01</td><td>Производительность</td><td>Загрузка списка операций (до 1000 записей) — не более 2 секунд.</td></tr><tr><td>NFR-OP-02</td><td>Валидация на клиенте</td><td>Проверка обязательных полей и форматов до отправки запроса на сервер.</td></tr><tr><td>NFR-OP-03</td><td>Обработка ошибок</td><td>Понятные сообщения пользователю при ошибках (например, «Не удалось сохранить, проверьте интернет»).</td></tr><tr><td>NFR-OP-04</td><td>Адаптивность</td><td>Форма добавления операции корректно отображается на мобильных устройствах (Chrome Android 11+, Safari iOS 12+).</td></tr><tr><td>NFR-OP-05</td><td>Безопасность</td><td>Все операции привязаны к <code class="md-inline-code">user_id</code>. Пользователь видит только свои операции.</td></tr></tbody></table>
+<hr/>
+<h2>8. Критерии приемки (Acceptance Criteria)</h2>
+<h3>AC для US-OP-01, US-OP-02 (Добавление дохода/расхода с двумя датами)</h3>
+<ul><li>[ ] Пользователь может выбрать тип операции «Доход» или «Расход».</li><li>[ ] Пользователь может установить <code class="md-inline-code">date_fact</code> = 25.10.2026 и <code class="md-inline-code">date_period</code> = 01.11.2026 (авансовый платеж).</li><li>[ ] Операция сохраняется и отображается в списке с обеими датами.</li><li>[ ] При выборе периода «Октябрь 2026» в отчете Cash Flow операция отображается в октябре.</li><li>[ ] При выборе периода «Ноябрь 2026» в отчете P&L операция отображается в ноябре.</li></ul>
+<h3>AC для US-OP-03 (Добавление налога вручную)</h3>
+<ul><li>[ ] Пользователь может выбрать тип операции «Налог».</li><li>[ ] Список категорий показывает только категории с <code class="md-inline-code">type='TAX'</code>.</li><li>[ ] Пользователь вводит сумму налога вручную (например, 45 957 ₽).</li><li>[ ] Операция сохраняется и учитывается в отчете P&L как расход на налоги.</li></ul>
+<h3>AC для US-OP-04 (Фильтрация списка операций)</h3>
+<ul><li>[ ] Пользователь может отфильтровать операции по проекту (один/несколько/все).</li><li>[ ] Пользователь может отфильтровать операции по периоду (месяц/квартал/год).</li><li>[ ] Пользователь может отфильтровать операции по типу (доходы/расходы/налоги).</li><li>[ ] Список отображается в хронологическом порядке (по <code class="md-inline-code">date_fact</code>).</li></ul>
+<h3>AC для US-OP-05 (Редактирование и удаление)</h3>
+<ul><li>[ ] Пользователь может открыть операцию, изменить любое поле и сохранить изменения.</li><li>[ ] При удалении операции появляется подтверждение «Вы уверены?».</li><li>[ ] После удаления операция исчезает из списка и не учитывается в отчетах.</li></ul>
+<h3>AC для US-OP-06 (Комментарий)</h3>
+<ul><li>[ ] Пользователь может добавить комментарий к операции (до 255 символов).</li><li>[ ] Комментарий отображается в списке операций.</li><li>[ ] Комментарий необязателен — операция сохраняется даже без него.</li></ul>
+<hr/>
+<h2>9. Сценарии использования (Use Cases)</h2>
+<h3>Сценарий 1: Добавление расхода на аренду (авансовый платеж)</h3>
+<ol><li>Пользователь открывает форму добавления операции.</li><li>Выбирает тип: «Расход».</li><li>Вводит сумму: 45 000 ₽.</li><li>Устанавливает <code class="md-inline-code">date_fact</code>: 25.10.2026 (день оплаты).</li><li>Устанавливает <code class="md-inline-code">date_period</code>: 01.11.2026 (аренда за ноябрь).</li><li>Выбирает проект: «ПВЗ Wildberries».</li><li>Выбирает категорию: «Аренда».</li><li>Добавляет комментарий: «Аренда за ноябрь».</li><li>Нажимает «Сохранить».</li><li>Операция сохраняется и отображается в списке.</li></ol>
+<h3>Сценарий 2: Добавление дохода с задержкой выплаты (Wildberries)</h3>
+<ol><li>Пользователь открывает форму добавления операции.</li><li>Выбирает тип: «Доход».</li><li>Вводит сумму: 123 953 ₽.</li><li>Устанавливает <code class="md-inline-code">date_fact</code>: 05.11.2026 (день получения денег).</li><li>Устанавливает <code class="md-inline-code">date_period</code>: 31.10.2026 (работа выполнена в октябре).</li><li>Выбирает проект: «ПВЗ Wildberries».</li><li>Выбирает категорию: «Доход от ВБ».</li><li>Нажимает «Сохранить».</li><li>В отчете Cash Flow за ноябрь доход отображается как поступление.</li><li>В отчете P&L за октябрь доход отображается как выручка октября.</li></ol>
+<h3>Сценарий 3: Добавление налога вручную</h3>
+<ol><li>Пользователь получает квитанцию из ФНС на сумму 45 957 ₽.</li><li>Открывает форму добавления операции.</li><li>Выбирает тип: «Налог».</li><li>Вводит сумму: 45 957 ₽.</li><li>Устанавливает <code class="md-inline-code">date_fact</code> и <code class="md-inline-code">date_period</code>: 15.11.2026 (дата уплаты).</li><li>Выбирает проект: «ПВЗ Wildberries».</li><li>Выбирает категорию: «УСН 6%».</li><li>Нажимает «Сохранить».</li><li>Налог учитывается в отчете P&L за ноябрь как расход на налоги.</li></ol>
+<hr/>
+
+</body>
+</html>
